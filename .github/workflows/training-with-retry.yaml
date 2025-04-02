@@ -30,7 +30,7 @@ on:
         type: string
         required: false
         description: 'The GPU memory utilization'
-        default: '0.60'
+        default: '0.50'
       learning_rate:
         type: string
         required: false
