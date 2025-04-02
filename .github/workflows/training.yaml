@@ -32,7 +32,7 @@ on:
         type: string
         required: false
         description: 'The per device training batch size'
-        default: '2'
+        default: '1'
       hf_repo:
         type: string
         required: true

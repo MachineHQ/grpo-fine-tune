@@ -30,7 +30,7 @@ on:
         type: string
         required: false
         description: 'The GPU memory utilization'
-        default: '0.50'
+        default: '0.60'
       learning_rate:
         type: string
         required: false
@@ -40,7 +40,7 @@ on:
         type: string
         required: false
         description: 'The per device training batch size'
-        default: '2'
+        default: '1'
       hf_repo:
         type: string
         required: true
