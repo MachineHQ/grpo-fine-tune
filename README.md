@@ -3,7 +3,7 @@
 Machine supercharges your GitHub Workflows with seamless GPU acceleration. Say goodbye to the tedious overhead of managing GPU runners and hello to streamlined efficiency. With Machine, developers and organizations can effortlessly scale their AI and machine learning projects, shifting focus from infrastructure headaches to innovation and speed.
 
 
-# GPU-Accelerated GRPO Fine-Tuning for LLMs
+# GRPO Fine-Tuning for LLMs
 
 This repository provides a complete, automated workflow for GPU-accelerated fine-tuning of large language models (LLMs) using Generative Reward Policy Optimization (GRPO). It leverages unsloth for efficient fine-tuning, Hugging Face for model hosting, and GitHub Actions powered by Machine.dev for GPU-accelerated training.
 
