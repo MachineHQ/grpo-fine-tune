@@ -19,12 +19,9 @@ per_device_train_batch_size = int(os.environ.get("PER_DEVICE_TRAIN_BATCH_SIZE", 
 hf_token = os.environ.get("HF_TOKEN", None)
 hf_repo = os.environ.get("HF_REPO", None)
 
-# Set up checkpoint handling with Hugging Face Hub
 if not hf_repo:
     raise ValueError("HF_REPO environment variable must be set")
-checkpoint_repo_id = f"{hf_repo}-checkpoints"
-# Create the checkpoint repo if it doesn't exist
-create_repo(checkpoint_repo_id, token=hf_token, exist_ok=True)
+create_repo(f"{hf_repo}", token=hf_token, exist_ok=True, private=True)
 current_dir = Path(__file__).parent
 
 model, tokenizer = FastLanguageModel.from_pretrained(
@@ -156,15 +153,15 @@ training_args = GRPOConfig(
     max_prompt_length = 256,
     max_completion_length = 200,
     max_steps = max_steps,
-    save_steps = 100,
-    save_total_limit = 10,
+    save_steps = 25,
+    save_total_limit = 3,
     save_on_each_node = True,
     max_grad_norm = 0.1,
     report_to = "none",
-    output_dir = f"{current_dir}/{checkpoint_repo_id}",
+    output_dir = f"{current_dir}/{hf_repo}",
     # Hub integration settings
     push_to_hub = True,
-    hub_model_id = f"{checkpoint_repo_id}",
+    hub_model_id = f"{hf_repo}",
     hub_strategy = "checkpoint",
     hub_private_repo = True,
     hub_token = hf_token,
@@ -184,14 +181,14 @@ trainer = GRPOTrainer(
     train_dataset=dataset,
 )
 
-def resume_training(trainer, checkpoint_repo_id):
+def resume_training(trainer, hf_repo):
     """
     Attempts to resume training from the latest checkpoint in the Hugging Face repo.
     Falls back through previous revisions if the latest checkpoint is corrupted.
     Starts fresh if no valid checkpoint is found.
     """
     api = HfApi()
-    output_dir = f"{current_dir}/{checkpoint_repo_id}"
+    output_dir = f"{current_dir}/{hf_repo}"
 
     def try_load_checkpoint(repo_path):
         try:
@@ -226,7 +223,7 @@ def resume_training(trainer, checkpoint_repo_id):
         # First try with the last version
         try:
             repo_path = snapshot_download(
-                repo_id=checkpoint_repo_id,
+                repo_id=hf_repo,
                 local_dir=output_dir,
                 local_dir_use_symlinks=False
             )
@@ -238,14 +235,14 @@ def resume_training(trainer, checkpoint_repo_id):
                 return
 
             # If latest version fails, try previous versions
-            repo_versions = api.list_repo_commits(checkpoint_repo_id)
-            print(f"Found {len(repo_versions)} versions of repository {checkpoint_repo_id}")
+            repo_versions = api.list_repo_commits(hf_repo)
+            print(f"Found {len(repo_versions)} versions of repository {hf_repo}")
 
             for commit in repo_versions[1:]:  # Skip first since we already tried it
                 print(f"Checking revision {commit.commit_id}")
                 try:
                     repo_path = snapshot_download(
-                        repo_id=checkpoint_repo_id,
+                        repo_id=hf_repo,
                         revision=commit.commit_id,
                         local_dir=output_dir,
                         local_dir_use_symlinks=False
@@ -262,7 +259,7 @@ def resume_training(trainer, checkpoint_repo_id):
             print("No valid checkpoints found in repository history")
 
         except RepositoryNotFoundError:
-            print(f"Repository {checkpoint_repo_id} not found")
+            print(f"Repository {hf_repo} not found")
         except Exception as e:
             print(f"Error accessing repository: {str(e)}")
     except Exception as e:
@@ -273,8 +270,7 @@ def resume_training(trainer, checkpoint_repo_id):
     trainer.train()
 
 # Usage
-resume_training(trainer, checkpoint_repo_id)
+resume_training(trainer, hf_repo)
 model.save_lora("grpo_saved_lora")
 # Save the final model to the main repo
-create_repo(f"{hf_repo}", token=hf_token, exist_ok=True, private=True)
 model.push_to_hub_merged(f"{hf_repo}", tokenizer, save_method="merged_16bit", token=hf_token)
