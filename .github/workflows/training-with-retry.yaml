@@ -25,7 +25,7 @@ on:
         type: string
         required: false
         description: 'The maximum number of steps'
-        default: '250'
+        default: '100'
       gpu_memory_utilization:
         type: string
         required: false
