@@ -18,11 +18,12 @@ process and the techniques used to fine-tune the model.
 
 ### ✨ **Key Features**
 
-- **⚡ GPU Acceleration:**  Efficiently fine-tune models using GPUs via Machine.dev
+- **⚡ GPU Acceleration:**  Efficiently fine-tune models using GPUs via [Machine](https://machine.dev)
+- **💵 Spot Pricing:** Leverage spot-priced GPU instances globally, optimizing performance and cost
 - **🚀 GRPO Implementation:** Fine-tune models with Group Relative Policy Optimization techniques
-- **💪 Unsloth Integration:** Leverage unsloth's optimizations for faster and more efficient training
+- **💪 Unsloth :** Leverage unsloth's optimizations for faster and more efficient training
 - **🔄 Auto-Retry Functionality:** Automatically resume training from checkpoints on spot instance interruptions
-- **📤 Hugging Face Integration:** Seamlessly push models and checkpoints to Hugging Face Hub
+- **📤 Hugging Face Hub:** Seamlessly push models and checkpoints to Hugging Face Hub
 - **🧮 Math Problem Solving:** Train models to improve performance on mathematical reasoning (GSM8K dataset)
 - **🏗️ Format Enforcement:** Enforce structured XML output format for better reasoning traces
 
