@@ -5,7 +5,7 @@ Machine supercharges your GitHub Workflows with seamless GPU acceleration. Say g
 
 # GRPO Fine-Tuning for LLMs
 
-This repository provides a complete, automated workflow for GPU-accelerated fine-tuning of large language models (LLMs) using Generative Reward Policy Optimization (GRPO). It leverages unsloth for efficient fine-tuning, Hugging Face for model hosting, and GitHub Actions powered by Machine.dev for GPU-accelerated training.
+This repository provides a complete, automated workflow for GPU-accelerated fine-tuning of large language models (LLMs) using Group Relative Policy Optimization (GRPO). It leverages unsloth for efficient fine-tuning, Hugging Face for model hosting, and GitHub Actions powered by Machine.dev for GPU-accelerated training.
 
 We have followed the guides provided by unsloth from their [blog](https://unsloth.ai/blog/r1-reasoning) 
 and [Notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen2.5_(3B)-GRPO.ipynb)
